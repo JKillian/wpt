@@ -67,6 +67,17 @@
                 entryMatch:             undefined,
                 order:                  undefined,
                 found:                  false
+            },
+            {
+                name:                   "measure_no_start_end",
+                startMark:              undefined,
+                endMark:                "mark_end",
+                startTime:              undefined,
+                duration:               undefined,
+                entryType:              "measure",
+                entryMatch:             undefined,
+                order:                  undefined,
+                found:                  false
             }
         ];
 
@@ -150,8 +161,22 @@
                     scenario.startTime = startMarkValue;
 
                     // when endMark is provided to the measure() call, the value of the mark whose name is
-                    // provided is used for the startMark
+                    // provided is used for the endMark
                     scenario.duration = endMarkValue - startMarkValue;
+                }
+                else if (scenario.startMark == undefined && scenario.endMark != undefined)
+                {
+                    // endMark is defined but startMark is undefined, provide both parameters
+                    window.performance.measure(scenario.name, scenario.startMark, scenario.endMark);
+
+                    // when startMark isn't provided to the measure() call, a DOMHighResTimeStamp corresponding
+                    // to the navigationStart attribute with a timebase of the same attribute is used; this is
+                    // equivalent to 0
+                    scenario.startTime = 0;
+
+                    // when endMark is provided to the measure() call, the value of the mark whose name is
+                    // provided is used for the endMark
+                    scenario.duration = endMarkValue;
                 }
             }
 
